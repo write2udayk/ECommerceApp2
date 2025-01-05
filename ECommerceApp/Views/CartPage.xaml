@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ECommerceApp.ViewModels"
+             x:Class="ECommerceApp.Views.CartPage"
+             Title="Shopping Cart">
+
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView ItemsSource="{Binding CartItems}">
+            <CollectionView.EmptyView>
+                <StackLayout>
+                    <Label Text="Your cart is empty"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Remove"
+                                          Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CartViewModel}}, Path=RemoveFromCartCommand}"
+                                          CommandParameter="{Binding .}"
+                                          BackgroundColor="Red"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="10">
+                            <Frame BorderColor="LightGray">
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <StackLayout>
+                                        <Label Text="{Binding ProductTitle}"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Price, StringFormat='${0:N2}'}"/>
+                                    </StackLayout>
+
+                                    <Stepper Grid.Column="1"
+                                             Value="{Binding Quantity}"
+                                              Minimum="1"
+                                              Maximum="10"
+                                              ValueChanged="Stepper_ValueChanged"/>
+
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Quantity}"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Cart Total -->
+        <Frame Grid.Row="1"
+               Padding="10">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="Total:"
+               FontAttributes="Bold"
+               VerticalOptions="Center"/>
+                <Label Grid.Column="1"
+               Text="{Binding CartTotal, StringFormat='${0:N2}'}"
+               FontAttributes="Bold"/>
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>
